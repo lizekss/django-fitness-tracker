@@ -4,6 +4,7 @@ from .models import FitnessActivity, Meal, SleepLog
 from .permissions import IsOwner
 from .serializers import FitnessActivitySerializer, MealSerializer, SleepLogSerializer
 
+
 class FitnessActivityViewSet(viewsets.ModelViewSet):
     serializer_class = FitnessActivitySerializer
     queryset = FitnessActivity.objects.all()
@@ -11,6 +12,7 @@ class FitnessActivityViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
 
 class MealViewSet(viewsets.ModelViewSet):
     serializer_class = MealSerializer
@@ -20,6 +22,7 @@ class MealViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
 class SleepLogViewSet(viewsets.ModelViewSet):
     serializer_class = SleepLogSerializer
     queryset = SleepLog.objects.all()
@@ -27,4 +30,3 @@ class SleepLogViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-

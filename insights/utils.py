@@ -3,12 +3,14 @@ from datetime import timedelta
 from django.utils.timezone import now
 from wellness.models import FitnessActivity, Meal, SleepLog
 
+
 def generate_personalized_insights(user, days=7):
     """
     Generate personalized insights based on the user's logged wellness data.
     """
     one_week_ago = now().date() - timedelta(days=days)
-    fitness_logs = FitnessActivity.objects.filter(user=user, date__gte=one_week_ago)
+    fitness_logs = FitnessActivity.objects.filter(
+        user=user, date__gte=one_week_ago)
     meals = Meal.objects.filter(user=user, date__gte=one_week_ago)
     sleep_logs = SleepLog.objects.filter(user=user, date__gte=one_week_ago)
 
@@ -29,7 +31,8 @@ def generate_personalized_insights(user, days=7):
     average_sleep_hours = (
         total_sleep_hours / sleep_logs.count() if sleep_logs.count() else 0
     )
-    sleep_quality_counts = sleep_logs.values('quality').annotate(count=models.Count('quality'))
+    sleep_quality_counts = sleep_logs.values(
+        'quality').annotate(count=models.Count('quality'))
 
     insights = {
         "fitness": {

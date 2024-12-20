@@ -17,32 +17,39 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FitnessActivity',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('activity_type', models.CharField(max_length=255)),
                 ('duration_minutes', models.PositiveIntegerField()),
                 ('date', models.DateField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='fitness_logs', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='fitness_logs', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='Meal',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('description', models.TextField()),
                 ('date', models.DateField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='meal_logs', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='meal_logs', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='SleepLog',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('hours', models.DecimalField(decimal_places=2, max_digits=4)),
-                ('quality', models.CharField(blank=True, choices=[('poor', 'Poor'), ('moderate', 'Moderate'), ('good', 'Good')], max_length=50, null=True)),
+                ('quality', models.CharField(blank=True, choices=[
+                 ('poor', 'Poor'), ('moderate', 'Moderate'), ('good', 'Good')], max_length=50, null=True)),
                 ('bedtime', models.TimeField(blank=True, null=True)),
                 ('wakeup_time', models.TimeField(blank=True, null=True)),
                 ('date', models.DateField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sleep_logs', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='sleep_logs', to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]
