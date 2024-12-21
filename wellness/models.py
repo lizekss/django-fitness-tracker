@@ -8,7 +8,7 @@ class FitnessActivity(models.Model):
     activity_type = models.CharField(max_length=255)
     duration_minutes = models.PositiveIntegerField()
     date = models.DateField(auto_now_add=True)
-    calories = models.PositiveIntegerField(blank=True, null=True)
+    calories = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"{self.activity_type} ({self.duration_minutes} min) by {self.user}"
@@ -19,7 +19,7 @@ class Meal(models.Model):
         User, on_delete=models.CASCADE, related_name="meal_logs")
     description = models.TextField()
     date = models.DateField(auto_now_add=True)
-    calories = models.PositiveIntegerField(blank=True, null=True)
+    calories = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Meal by {self.user} on {self.date}"

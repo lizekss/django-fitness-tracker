@@ -1,51 +1,61 @@
-from django.db import models
+from django.db.models import Sum, Avg, Count
 from datetime import timedelta
 from django.utils.timezone import now
 from wellness.models import FitnessActivity, Meal, SleepLog
+from django.db.models.functions import TruncDate, TruncDay
 
 
 def generate_personalized_insights(user, days=7):
     """
-    Generate personalized insights based on the user's logged wellness data.
+    Generate personalized insights based on the user's logged wellness data, focusing on daily averages.
     """
     one_week_ago = now().date() - timedelta(days=days)
-    fitness_logs = FitnessActivity.objects.filter(
-        user=user, date__gte=one_week_ago)
+
+    # fetch data for the time period
+    fitness_logs = FitnessActivity.objects.filter(user=user, date__gte=one_week_ago)
     meals = Meal.objects.filter(user=user, date__gte=one_week_ago)
     sleep_logs = SleepLog.objects.filter(user=user, date__gte=one_week_ago)
 
-    # fitness stats
-    total_fitness_time = sum(log.duration_minutes for log in fitness_logs)
+    fitness_stats = fitness_logs.aggregate(
+        avg_time_per_day=Sum('duration_minutes') / Count('date', distinct=True),
+        avg_calories_per_day=Sum('calories') / Count('date', distinct=True)
+    )
+
     most_common_activity = (
-        fitness_logs.values('activity_type')
-        .annotate(count=models.Count('activity_type'))
+        fitness_logs
+        .values('activity_type')
+        .annotate(count=Count('activity_type'))
         .order_by('-count')
         .first()
     )
 
-    # meal stats
-    total_meals_logged = meals.count()
-
-    # sleep stats
-    total_sleep_hours = sum(log.hours for log in sleep_logs)
-    average_sleep_hours = (
-        total_sleep_hours / sleep_logs.count() if sleep_logs.count() else 0
+    meal_stats = meals.aggregate(
+        avg_calories_per_day=Sum('calories') / Count('date', distinct=True)
     )
-    sleep_quality_counts = sleep_logs.values(
-        'quality').annotate(count=models.Count('quality'))
 
+    sleep_stats = sleep_logs.aggregate(
+        avg_sleep_per_day=Sum('hours') / Count('date', distinct=True)
+    )
+
+    sleep_quality_counts = (
+        sleep_logs
+        .values('quality')
+        .annotate(count=Count('quality'))
+    )
+
+    # construct the insights
     insights = {
         "fitness": {
-            "total_time": total_fitness_time,
-            "most_common_activity": most_common_activity['activity_type'] if most_common_activity else None,
+            "average_time_per_day": fitness_stats.get('avg_time_per_day', 0),
+            "average_calories_burned_per_day": fitness_stats.get('avg_calories_per_day', 0),
+            "most_common_activity": most_common_activity.get('activity_type') if most_common_activity else None,
         },
         "meals": {
-            "total_meals_logged": total_meals_logged,
+            "average_calories_consumed_per_day": meal_stats.get('avg_calories_per_day', 0),
         },
         "sleep": {
-            "total_hours": total_sleep_hours,
-            "average_hours": average_sleep_hours,
-            "quality_counts": sleep_quality_counts,
+            "average_sleep_hours_per_day": sleep_stats.get('avg_sleep_per_day', 0),
+            "quality_counts": list(sleep_quality_counts),
         },
     }
 
