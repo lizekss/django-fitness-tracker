@@ -1,16 +1,18 @@
 from django.db.models import Sum, Avg, Count
 from datetime import timedelta
 from django.utils.timezone import now
+
+from user.models import User
 from wellness.models import FitnessActivity, Meal, SleepLog
 from django.db.models.functions import TruncDate, TruncDay
 
 
-def generate_personalized_insights(user, days=7):
+def generate_personalized_insights(user_id, days=7):
     """
     Generate personalized insights based on the user's logged wellness data, focusing on daily averages.
     """
     one_week_ago = now().date() - timedelta(days=days)
-
+    user = User.objects.get(id=user_id)
     # fetch data for the time period
     fitness_logs = FitnessActivity.objects.filter(user=user, date__gte=one_week_ago)
     meals = Meal.objects.filter(user=user, date__gte=one_week_ago)
