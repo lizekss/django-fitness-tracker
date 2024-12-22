@@ -14,12 +14,14 @@ def generate_personalized_insights(user_id, days=7):
     one_week_ago = now().date() - timedelta(days=days)
     user = User.objects.get(id=user_id)
     # fetch data for the time period
-    fitness_logs = FitnessActivity.objects.filter(user=user, date__gte=one_week_ago)
+    fitness_logs = FitnessActivity.objects.filter(
+        user=user, date__gte=one_week_ago)
     meals = Meal.objects.filter(user=user, date__gte=one_week_ago)
     sleep_logs = SleepLog.objects.filter(user=user, date__gte=one_week_ago)
 
     fitness_stats = fitness_logs.aggregate(
-        avg_time_per_day=Sum('duration_minutes') / Count('date', distinct=True),
+        avg_time_per_day=Sum('duration_minutes') /
+        Count('date', distinct=True),
         avg_calories_per_day=Sum('calories') / Count('date', distinct=True)
     )
 

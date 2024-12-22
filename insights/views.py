@@ -65,7 +65,6 @@ class CustomReportView(ReportView):
         return days
 
 
-
 class TaskResultView(APIView):
     def get(self, request, task_id, *args, **kwargs):
         task_result = AsyncResult(task_id)
