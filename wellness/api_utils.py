@@ -1,6 +1,7 @@
 import os
 
 import requests
+from django.core.cache import cache
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -51,21 +52,30 @@ def get_available_activities():
 
 
 def get_calories_burned(activity_type, duration_minutes):
-    api_key = os.getenv('APININJAS_API_KEY')
-    url = f"https://api.api-ninjas.com/v1/caloriesburned?activity={activity_type}&duration={duration_minutes}"
+    cache_key = f"activity_calories_per_hour_{activity_type}"
 
-    headers = {
-        'X-Api-Key': api_key
-    }
+    # Try to get the calories per hour value from the cache
+    calories_per_hour = cache.get(cache_key)
 
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        data = response.json()[0]
-        return data.get('total_calories', 0)
-    except requests.exceptions.RequestException as e:
-        print(f"Error calling API: {e}")
-        return 0
+    if calories_per_hour:
+        return calories_per_hour * duration_minutes / 60
+    else:
+        api_key = os.getenv('APININJAS_API_KEY')
+        url = f"https://api.api-ninjas.com/v1/caloriesburned?activity={activity_type}&duration={duration_minutes}"
+
+        headers = {
+            'X-Api-Key': api_key
+        }
+
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            data = response.json()[0]
+            cache.set(cache_key, data.get('calories_per_hour', 0))
+            return data.get('total_calories', 0)
+        except requests.exceptions.RequestException as e:
+            print(f"Error calling API: {e}")
+            return 0
 
 
 def get_meal_calories(description):
