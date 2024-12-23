@@ -16,7 +16,7 @@ The system also features Swagger integration for API documentation, ensuring a s
    - Users can log fitness activities, meals, and sleep data through `/api/wellness/`.
    - **Fitness Activities:**
      - Users can log details such as the type of activity (e.g., running, cycling, swimming), the duration in minutes, and calories burned.
-     - Calories burned are calculated using the [CalorieNinjas CaloriesBurned API](https://calorieninjas.com/api/caloriesburned), providing accurate estimations for different activity types and durations.
+     - Calories burned are calculated using the [APINinjas CaloriesBurned API](https://api-ninjas.com/api/caloriesburned), providing accurate estimations for different activity types and durations.
    - **Meals:**
      - Users can log meals with descriptions and the number of calories consumed.
      - Calorie information is retrieved via the [CalorieNinjas API](https://calorieninjas.com/api/).
