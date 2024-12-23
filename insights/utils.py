@@ -4,7 +4,6 @@ from django.utils.timezone import now
 
 from user.models import User
 from wellness.models import FitnessActivity, Meal, SleepLog
-from django.db.models.functions import TruncDate, TruncDay
 
 
 def generate_personalized_insights(user_id, days=7):

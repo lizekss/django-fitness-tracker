@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { margin: 20px auto; max-width: 600px; }
+        .header { background-color: #f4f4f4; padding: 10px 20px; text-align: center; }
+        .content { padding: 20px; }
+        .footer { text-align: center; color: #888; font-size: 12px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Your Weekly Fitness Insights</h1>
+    </div>
+    <div class="content">
+        <p>Hi {{ user.username }},</p>
+        <p>Here's what you accomplished this week:</p>
+        <ul>
+            <li>Average calories burned per day: {{ insights.fitness.average_calories_burned_per_day }}</li>
+            <li>Average time spent on fitness activities per day: {{ insights.fitness.average_time_per_day }} minutes
+            </li>
+            <li>Most common activity:
+                {% if insights.fitness.most_common_activity %}
+                {{ insights.fitness.most_common_activity }}
+                {% else %}
+                No activities logged
+                {% endif %}
+            </li>
+            <li>Average calories consumed per day: {{ insights.meals.average_calories_consumed_per_day }}</li>
+            <li>Average sleep hours per day: {{ insights.sleep.average_sleep_hours_per_day }}</li>
+            <li>Sleep quality breakdown:
+                <ul>
+                    {% for quality in insights.sleep.quality_counts %}
+                    <li>{{ quality.quality }}: {{ quality.count }} times</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+        <p>Keep up the great work!</p>
+    </div>
+    <div class="footer">
+        <p>You are receiving this email because you're subscribed to weekly insights.</p>
+    </div>
+</div>
+</body>
+</html>
