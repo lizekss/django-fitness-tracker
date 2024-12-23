@@ -6,6 +6,36 @@ from user.models import User
 from wellness.models import FitnessActivity, Meal, SleepLog
 
 
+def calculate_sleep_health(sleep_logs):
+    """
+    Calculate sleep health metrics for a user, including sleep regularity index
+    and average sleep duration.
+    """
+    if not sleep_logs.exists():
+        return {
+            "message": "No sleep data for the specified period.",
+        }
+
+    average_sleep_hours = sleep_logs.aggregate(avg_hours=Avg('hours'))['avg_hours']
+
+    # percentage of days with sleep within 1 hour of the average
+    consistent_days = sleep_logs.filter(
+        hours__gte=average_sleep_hours - 1,
+        hours__lte=average_sleep_hours + 1
+    ).count()
+    sri = (consistent_days / sleep_logs.count()) * 100
+
+    # percentage of days in the healthy sleep range (7–9 hours)
+    healthy_days = sleep_logs.filter(hours__gte=7, hours__lte=9).count()
+    healthy_sleep_percentage = (healthy_days / sleep_logs.count()) * 100
+
+    return {
+        "average_sleep_hours": round(average_sleep_hours, 2),
+        "sleep_regularity": round(sri, 2),
+        "healthy_sleep_percentage": round(healthy_sleep_percentage, 2),
+    }
+
+
 def generate_personalized_insights(user_id, days=7):
     """
     Generate personalized insights based on the user's logged wellness data, focusing on daily averages.

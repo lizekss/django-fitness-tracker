@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/user/', include('user.urls')),
     path('api/wellness/', include('wellness.urls')),
     path('api/insights/', include('insights.urls')),
+    path('api/goals/', include('goals.urls')),
 ]
 
 # swagger url's

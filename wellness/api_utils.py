@@ -51,8 +51,8 @@ def get_available_activities():
         return []
 
 
-def get_calories_burned(activity_type, duration_minutes):
-    cache_key = f"activity_calories_per_hour_{activity_type}"
+def get_calories_burned(activity_type, duration_minutes, weight):
+    cache_key = f"activity_calories_per_hour_{activity_type}_{weight}"
 
     # Try to get the calories per hour value from the cache
     calories_per_hour = cache.get(cache_key)
@@ -62,7 +62,9 @@ def get_calories_burned(activity_type, duration_minutes):
     else:
         api_key = os.getenv('APININJAS_API_KEY')
         url = f"https://api.api-ninjas.com/v1/caloriesburned?activity={activity_type}&duration={duration_minutes}"
-
+        if weight:
+            weight_lbs = int(weight * 2.20462)
+            url += f"&weight={weight_lbs}"
         headers = {
             'X-Api-Key': api_key
         }

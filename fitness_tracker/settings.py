@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'user',
     'wellness',
     'insights',
+    'goals',
 ]
 
 MIDDLEWARE = [
@@ -135,16 +136,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',  # For browsable API
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'DEFAULT_THROTTLE_CLASSES': [
-        'insights.throttling.DailyThrottle',
-        'insights.throttling.WeeklyThrottle',
-        'insights.throttling.MonthlyThrottle',
-    ],
-    'DEFAULT_THROTTLE_RATES': {
-        'daily': '1/day',
-        'weekly': '1/week',
-        'monthly': '1/month',
-    }
 }
 
 AUTH_USER_MODEL = 'user.User'
