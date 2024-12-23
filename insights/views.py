@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from .tasks import insights_task
 from celery.result import AsyncResult
 
+from .throttling import MonthlyThrottle, WeeklyThrottle, DailyThrottle
+
 
 class ReportView(APIView, ABC):
     """
@@ -28,6 +30,7 @@ class DailyReportView(ReportView):
     """
     API endpoint to generate and return daily personalized insights for the user.
     """
+    throttle_classes = [DailyThrottle]
 
     def get_days(self):
         return 1
@@ -37,6 +40,7 @@ class WeeklyReportView(ReportView):
     """
     API endpoint to generate and return weekly personalized insights for the user.
     """
+    throttle_classes = [WeeklyThrottle]
 
     def get_days(self):
         return 7
@@ -46,6 +50,7 @@ class MonthlyReportView(ReportView):
     """
     API endpoint to generate and return monthly personalized insights for the user.
     """
+    throttle_classes = [MonthlyThrottle]
 
     def get_days(self):
         return 30
