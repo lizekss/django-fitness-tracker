@@ -145,5 +145,5 @@ The system also features Swagger integration for API documentation, ensuring a s
 ---
 
 ## Contact
-For issues or feature requests, open an issue on the [GitHub repository](https://github.com/username/fitness-tracker).
+For issues or feature requests, open an issue on the [GitHub repository](https://github.com/lizekss/django-fitness-tracker/).
 
