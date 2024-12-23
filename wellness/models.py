@@ -13,6 +13,9 @@ class FitnessActivity(models.Model):
     def __str__(self):
         return f"{self.activity_type} ({self.duration_minutes} min) by {self.user}"
 
+    class Meta:
+        verbose_name_plural = 'Fitness activities'
+
 
 class Meal(models.Model):
     user = models.ForeignKey(
