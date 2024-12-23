@@ -4,6 +4,7 @@ from django.db import models
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
+    is_subscribed_to_weekly_emails = models.BooleanField(default=True)
 
     def __str__(self):
         return self.username

@@ -16,7 +16,7 @@ User = get_user_model()
 
 @shared_task
 def send_weekly_insights():
-    users = User.objects.filter(is_active=True)
+    users = User.objects.filter(is_subscribed_to_weekly_emails=True)
     for user in users:
         weekly_averages = generate_personalized_insights(user.id)
         subject = "Your Weekly Fitness Insights"
