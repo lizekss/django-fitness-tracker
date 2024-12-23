@@ -54,10 +54,7 @@ The system also features Swagger integration for API documentation, ensuring a s
 
 ### Database Queries
 - **Django ORM:**
-  - Complex queries using `annotate`, `aggregate`, and `annotate` are used to compute insights directly from the database, reducing the need for additional processing.
-- **Examples:**
-  - Daily average calories burned: `Sum('calories') / Count('date', distinct=True)`.
-  - Most common activity type: `values('activity_type').annotate(count=Count('activity_type')).order_by('-count')`.
+  - Complex queries using `annotate`, `aggregate`, etc are used to compute insights directly from the database, reducing the need for additional processing.
 
 ---
 
